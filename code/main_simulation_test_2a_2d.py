@@ -12,10 +12,8 @@ Based on 2D simulation of Todaka et al 2004: Transport simulation in Onikobe
 import numpy as np
 import porepy as pp
 import reaktoro.reaktoro4py as rt
-import matplotlib.pyplot as plt
 import rt_utills
 
-import scipy as sps
 import equations
 from solve_non_linear import solve_eqs
 import update_param

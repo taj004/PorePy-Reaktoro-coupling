@@ -13,8 +13,6 @@ import porepy as pp
 import reaktoro.reaktoro4py as rt
 import matplotlib.pyplot as plt
 
-
-import rt_utills
 import reactive_transport
 import equations
 from solve_non_linear import solve_eqs
@@ -533,7 +531,6 @@ while current_time < final_time :
     if conv and current_time in store_time: 
         # Export values
         plot_1d_several(title_time=title_time[j], index=j)
-        #rt_utills.store_chem_values_1d(chemical_solver, mdg, store_time[j])
         j+=1
     # end if
 # end time-loop

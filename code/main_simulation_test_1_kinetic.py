@@ -16,7 +16,6 @@ import update_param
 import reactive_transport
 import equations
 from solve_non_linear import solve_eqs
-import rt_utills
 
 import porepy_reaktoro_interface
 
@@ -556,7 +555,6 @@ while current_time < final_time:
     
     if conv and current_time in store_time:
         # Export values
-        rt_utills.store_chem_values_1d(chemical_solver, mdg, store_time[j])
         plot_1d_several(title_time=store_title_time[j], index=j) 
         j+=1 
     # end if
