@@ -8,10 +8,10 @@ using Newton's method and the AD-framework in PorePy
 """
 
 import numpy as np
-import scipy.sparse as sps
+#import scipy.sparse as sps
 import scipy.sparse.linalg as spla
-import porepy as pp
-import update_param
+#import porepy as pp
+#import update_param
 
 def clip_variable(x, inds, min_val, max_val):
     """
@@ -222,7 +222,6 @@ def newton_gb(equations,
             variables=var_keys_list,
             from_iterate=True
             )
-       # x_new = x_prev + dx
         
         if np.any(np.isnan(x_new)):
             flag = 1

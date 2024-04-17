@@ -5,7 +5,7 @@ Update various parameters for the computations
 
 @author: uw
 
-TODO: The function needs a major cleanup, since there are some redundencies
+TODO: The function needs a major cleanup, since there are many redundencies
 """
 
 import numpy as np

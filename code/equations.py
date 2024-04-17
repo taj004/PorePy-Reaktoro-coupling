@@ -1204,7 +1204,7 @@ class EquationConstruction:
             )
         # end if-else
 
-    def subdomain_porosity_scale(self, mdg: pp.MixedDimensionalGrid):
+    def subdomain_porosity_scale(self, mdg: pp.MixedDimensionalGrid, kw="mass"):
         """Porosity scaling of the subdomains"""
 
         porosity = np.zeros(mdg.num_subdomain_cells())
@@ -1213,7 +1213,7 @@ class EquationConstruction:
             
             index = slice(global_index, global_index + sd.num_cells)
             
-            phi = d[pp.PARAMETERS]["mass"]["porosity"]
+            phi = d[pp.PARAMETERS][kw]["porosity"]
             porosity[index] = phi 
             
             global_index += sd.num_cells
@@ -1289,7 +1289,8 @@ class EquationConstruction:
             
         else:
             self.porosity_scale = self.subdomain_porosity_scale(
-                equation_system.mdg
+                equation_system.mdg,
+                kw=self.mass_kw
                 )
         # end if
         #breakpoint()

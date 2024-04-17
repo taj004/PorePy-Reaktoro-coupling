@@ -44,7 +44,7 @@ frac3 = np.array([
     [500, 1000]
     ])
 
-mdg = pp.meshing.cart_grid(fracs=[frac], 
+mdg = pp.meshing.cart_grid(fracs=[frac, frac2, frac3], 
                           nx=[50, 50],
                           physdims=[1500, 1500])
 
@@ -577,7 +577,7 @@ for sd, d in mdg.subdomains(return_data=True):
 
         d[pp.PARAMETERS][transport_kw].update(
             {
-                "time_step": 1000,  # s,
+                "time_step": 1000,  # initial time step, in s,
                 "current_time": 0,
                 "final_time": 200 * pp.YEAR,
                 "constant_time_step": False,

@@ -183,12 +183,6 @@ bc_chemistry = porepy_reaktoro_interface.ChemicalSolver(
     use_ODML=False 
     )
 
-# bc_H2O = 1
-# bcNaCl = 0.9
-# bcMgCl2 = 0.05
-# bcCaCl2 = 0.01
-# bcCo2 = 0.75
-
 bc_chemistry.state.pressure(p, "bar")
 bc_chemistry.state.temperature(t, "K")
 
@@ -199,8 +193,6 @@ bc_chemistry.state.set("CaCl2(aq)", 0.01, "mol")
 bc_chemistry.state.set("CO2(aq)"  , 0.75, "mol")
 
 bc_conv = bc_chemistry.solve_chemistry(dt=1800)
-#bc_conv = bc_chemistry.solver.precondition(bc_chemistry.state)
-#bc_chemistry.phase_scaling(mdg, leal_test=True, is_boundary=True)
 
 bc_chemistry.state.scalePhaseVolume("AqueousPhase", porosity, "m3")
 
@@ -292,7 +284,7 @@ for sd, d in mdg.subdomains(return_data=True):
     
     d[pp.PARAMETERS][transport_kw].update(
         {
-            "time_step": 1800.0,  # s,
+            "time_step": 1800.0,  # initial time step, in s.
             "current_time": 0,
             "final_time": 50 * pp.DAY,
             "constant_time_step": True,

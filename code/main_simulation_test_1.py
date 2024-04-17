@@ -252,7 +252,7 @@ for sd, d in mdg.subdomains(return_data=True):
     
     d[pp.PARAMETERS][transport_kw].update(
         {
-            "time_step": 1800,  # s,
+            "time_step": 1800,  # initial time step, in s.
             "current_time": 0,
             "final_time": 50 * pp.DAY,
             "constant_time_step": True,
