@@ -233,7 +233,7 @@ chemical_solver.state.scalePhaseVolume("Magnetite",    0.0176, "m3")
 chemical_solver.state.scalePhaseVolume("Magnetite",    0.0176, "m3")
 
 #%% Initial porosity
-x = 0
+
 minerals = []
 for phase in chemical_solver.chem_system.phases():
   
@@ -312,6 +312,7 @@ bc_chemistry.state.set("O2(aq)",   2.344e-40, "mol")
 restriction = rt.EquilibriumRestrictions(bc_chemistry.chem_system)
 for i in range(len(mineral_species)):
     restriction.cannotReact(mineral_species[i])
+# end i-loop
 
 bc_solver = rt.EquilibriumSolver(bc_chemistry.chem_system)
 bb = bc_solver.solve(bc_chemistry.state, restrictions=restriction)
@@ -461,6 +462,7 @@ for sd, d in mdg.subdomains(return_data=True):
         "mass_weight": porosity * unity,
         "bc_values": bc_values_for_flow,
         "bc": bound_for_flow,
+        "permeability": Kxx * unity / constant_params.dynamic_viscosity(),
         "second_order_tensor": perm,
         "darcy_flux": np.abs(init_darcy_flux),
     }

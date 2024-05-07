@@ -486,7 +486,6 @@ for sd, d in mdg.subdomains(return_data=True):
     
     # ---- Some extra stuff
     # Initial guess for Darcy flux
-    inds = np.arange(0, int(sd.num_faces/2))
     init_darcy_flux = np.zeros(sd.num_faces)
 
     # Heat capacity and conduction
@@ -515,7 +514,7 @@ for sd, d in mdg.subdomains(return_data=True):
         "mass_weight": porosity * specific_volume * unity,
         "bc_values": bc_values_for_flow,
         "bc": bound_for_flow,
-        "permeability": Kxx * unity,
+        "permeability": Kxx * specific_volume * unity/ constant_params.dynamic_viscosity(),
         "second_order_tensor": perm,
         "darcy_flux": np.abs(init_darcy_flux),
     }
@@ -707,7 +706,7 @@ rt_eqs = reactive_transport.ReactiveTransport(
 #%% Prepere for exporting
 
 # Make folder
-folder_name = "pictures/simulation_4/"
+folder_name = "pictures/simulation_4_test/"
 
 if not os.path.exists(folder_name):
     os.makedirs(folder_name)

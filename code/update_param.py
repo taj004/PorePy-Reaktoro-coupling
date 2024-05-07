@@ -81,19 +81,18 @@ def rho(p=0.0, temp=0.0):
     # Pressure values
     c = 1.0e-9  # compresibility [1/Pa]
     p_ref = constant_params.ref_p()  # reference pressure [Pa]
-    # 18649845060.994354
 
     # Temperature values
     beta = 4e-4
     temp_ref = constant_params.ref_temp()
 
     # Safty if default input is used
-    if isinstance(p, (float, int)) is False:  # p is a scalar
+    if isinstance(p, (float, int)) is True:  # p is a scalar
         if p == 0.0:
             p = p_ref
     # end if
 
-    if isinstance(temp, (float, int)) is False:
+    if isinstance(temp, (float, int)) is True:
         if temp == 0.0:
             temp = temp_ref
     # end if
@@ -350,9 +349,6 @@ def update_aperture(mdg):
             
             mineral_width_CaCO3 = mineral_vol_CaCO3 / S
             mineral_width_CaSO4 = mineral_vol_CaSO4 / S
-
-            #initial_aperture = d[pp.PARAMETERS]["mass"]["initial_aperture"]
-            #open_aperture = d[pp.PARAMETERS]["mass"]["open_aperture"]
             
             aperture = ( 
                 constant_params.open_aperture()- mineral_width_CaCO3 - mineral_width_CaSO4
@@ -383,7 +379,7 @@ def update_grid_perm(mdg):
     Calculate perm
     """
     for sd, d in mdg.subdomains(return_data=True):
-        #print(sd.dim)
+      
         if sd.dim == mdg.dim_max():
             ref_phi = d[pp.PARAMETERS]["reference"]["porosity"]
             ref_perm = d[pp.PARAMETERS]["reference"]["permeability"]
@@ -589,7 +585,6 @@ def update_mass_weight(mdg, iterate=True):
 def update_interface(mdg):
     """
     Update the interfacial permeability,
-    based on the fully THM model code.
     """
 
     for e, d in mdg.interfaces(return_data=True):
@@ -629,7 +624,7 @@ def specific_vol(mdg, sd):
 def update_intersection_aperture(mdg, sd, return_val=True):
     """
     calulcate aperture intersection points (i.e. 0D for 2D matrix, or 1 and 0D for 3D matrix)
-    gb : pp.GRID Bucket
+    mdg : pp.MixedDimensionalGrid
     sd : intersection grid
 
     """
@@ -843,13 +838,7 @@ def update_concentrations(mdg, equation_system):
 
     # Loop over the subdomain and return values
     for sd, d in mdg.subdomains(return_data=True):
-        # inds1 = slice(start_pt*2, (start_pt*2+2*sd.num_cells))
-        # inds2 = slice(start_pt*4, (start_pt*4+4*sd.num_cells))
-        # inds3 = slice(start_pt*3, (start_pt*3+3*sd.num_cells))
-
-        # print(inds1)
-        # print(inds2)
-        # print(inds3)        
+       
         mineral_in_subdomain = minerals[
             start_pt * 2 : start_pt * 2+ 2 * sd.num_cells
             ]
