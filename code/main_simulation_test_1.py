@@ -422,7 +422,7 @@ if not os.path.exists(folder_name):
 #%% Plot as a 2x3 figure (done for the paper)
 
 fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(18,10))
-plt.subplots_adjust(wspace=0.4, hspace=0.3)
+plt.subplots_adjust(wspace=0.41, hspace=0.43)
 axes = axes.ravel()
 
 def plot_1d_several(title_time, index):
@@ -440,10 +440,20 @@ def plot_1d_several(title_time, index):
     
     # Plot conc
     ax = axes[index]
-    conc_name = ["CO2(aq)", "Ca+2", "HCO3-", "OH-", "H+", "Mg(HCO3)+"]
-    colour_name = ["b", "purple" ,"violet", "r", "g", "k"]
-    label_name = ["CO$_{2}$(aq)", "Ca$^{2+}$", "HCO$_{3}^{-}$", 
-                  "OH$^{-}$", "H$^{+}$", "Mg(CO$_{3}$)$^{+}$" ]
+    conc_name = [
+        "CO2(aq)", "Ca+2", "HCO3-", "OH-", "H+", "Mg(HCO3)+",
+        "Mg+2",  "CaCl+","CO3-2", "Ca(HCO3)+", "MgCl+"
+        ]
+    colour_name = [
+        "b", "purple" ,"violet", "r", "g",  "orange",
+        "k", "pink", "brown", "deeppink", "slategrey"
+        ]
+    label_name = [
+        "CO$_{2}$(aq)", "Ca$^{2+}$", "HCO$_{3}^{-}$", 
+        "OH$^{-}$", "H$^{+}$", "Mg(HCO$_{3}$)$^{+}$",
+        "Mg$^{2+}$", "CaCl$^{+}$", "CO$_{3}^{2-}$", "Ca(HCO$_{3}$)$^{+}$", "MgCl$^{+}$"
+
+                  ]
     for i in range(len(conc_name)):
 
         conc = np.zeros(int(sd.num_cells/2))
@@ -457,16 +467,17 @@ def plot_1d_several(title_time, index):
     # end i-loop
     
     if index == 2:
-        ax.legend(loc="upper right", fontsize=17, bbox_to_anchor=(1.7, 1.0))
+        ax.legend(loc="upper right", fontsize=20, bbox_to_anchor=(1.85, 1.46))
     # else
     
-    ax.tick_params(axis="y", labelsize=20)
-    ax.set_xticks(ticks=xt, labels=xt, fontsize=20)
-    ax.set_xlabel("x [m]", fontsize=20)
+    fontsize = 26
+    ax.tick_params(axis="y", labelsize=fontsize)
+    ax.set_xticks(ticks=xt, labels=xt, fontsize=fontsize)
+    ax.set_xlabel("x [m]", fontsize=fontsize)
     if index == 0:
-        ax.set_ylabel("Concentration [molal]", fontsize=20)
+        ax.set_ylabel("Concentration [molal]", fontsize=fontsize)
     # end if
-    ax.set_title(title_time, fontsize=25)
+    ax.set_title(title_time, fontsize=fontsize+3)
     
     # plot mineral    
     conc_name = ["Calcite", "Dolomite"]
@@ -493,15 +504,17 @@ def plot_1d_several(title_time, index):
     # end i-loop
     
     if index == 2:
-        ax.legend(loc="center right", fontsize=17, bbox_to_anchor=(1.7, 0.81))
+        ax.legend(loc="upper right", fontsize=20, bbox_to_anchor=(1.77, 0.89))
     # else
     
-    ax.tick_params(axis="both", labelsize=20)
-    ax.set_xlabel("x [m]", fontsize=20)
-    ax.set_xticks(ticks=xt, labels=xt, fontsize=20)
+    yt_min = np.array([0.0, 0.5, 1.0, 1.5, 2.0])
+    ax.set_yticks(ticks=yt_min, labels=yt_min, fontsize=fontsize)
+    
+    ax.set_xlabel("x [m]", fontsize=fontsize)
+    ax.set_xticks(ticks=xt, labels=xt, fontsize=fontsize)
     
     if index == 0: 
-        ax.set_ylabel("Mineral volume [%]", fontsize=20)
+        ax.set_ylabel("Mineral volume [%]", fontsize=fontsize)
     # end if
     
 # end function

@@ -29,6 +29,7 @@ import porepy_reaktoro_interface
 
 # Define mdg
 
+#%% Structured 
 frac = np.array([
     [100, 600],
     [700, 700]    
@@ -54,7 +55,50 @@ domain = {"xmin": 0, "xmax": np.max(sd.face_centers[0]),
           "ymin": 0, "ymax": np.max(sd.face_centers[1]),
           } # domain
 
-# Keywords
+#%% Unstructured
+
+# def benchmark_2d_case_3(size: pp.number = 1) -> list[pp.LineFracture]:
+#     """Return a list of fractures as used in case 3 of the 2d benchmark study by
+#     Flemisch et al. 2018.
+
+#     Parameters:
+#         size: The side length of the domain.
+
+#     Returns:
+#         List of fractures.
+
+#     """
+#     points = [
+#         np.array([[0.0500, 0.2200], [0.4160, 0.0624]]),
+#         np.array([[0.0500, 0.2500], [0.2750, 0.1350]]),
+#         np.array([[0.1500, 0.4500], [0.6300, 0.0900]]),
+#         np.array([[0.1500, 0.4000], [0.9167, 0.5000]]),
+#         np.array([[0.6500, 0.849723], [0.8333, 0.167625]]),
+#         np.array([[0.7000, 0.849723], [0.2350, 0.167625]]),
+#         np.array([[0.6000, 0.8500], [0.3800, 0.2675]]),
+#         np.array([[0.3500, 0.8000], [0.9714, 0.7143]]),
+#         np.array([[0.7500, 0.9500], [0.9574, 0.8155]]),
+#         np.array([[0.1500, 0.4000], [0.8363, 0.9727]]),
+#     ]
+#     fractures = [pp.LineFracture(pts * size) for pts in points]
+#     return fractures
+
+# domain = {"xmin": 0, "xmax": 1500, "ymin": 0, "ymax": 1500}
+
+# mesh_args = {
+#     "mesh_size_bound": 40.0,
+#     "mesh_size_min":   40.0,
+#     "mesh_size_frac":  40.0
+#     } 
+
+# f_list = benchmark_2d_case_3(size=1500)
+# network = pp.FractureNetwork2d(
+#     fractures=f_list,
+#     domain=pp.Domain(domain)
+#     )
+# mdg = network.mesh(mesh_args)
+
+#%% Keywords
 mass_kw = "mass"
 chemistry_kw = "chemistry"
 transport_kw = "transport"
@@ -685,7 +729,7 @@ for e,d in mdg.interfaces(return_data=True):
 update_param.update_interface(mdg)
 
 #%% The data in the highest dimension
-sd = mdg.subdomains(dim=mdg.dim_max() )[0]
+sd = mdg.subdomains(dim=mdg.dim_max())[0]
 data = mdg.subdomain_data(sd)
 
 # set initial chemical values in pp.parameters
@@ -706,7 +750,12 @@ rt_eqs = reactive_transport.ReactiveTransport(
 #%% Prepere for exporting
 
 # Make folder
-folder_name = "pictures/simulation_4_test/"
+
+if hasattr(sd, "cart_dims"):
+    folder_name = "pictures/simulation_4_structured/"
+else:
+    folder_name = "pictures/simulation_4_unstructured/"
+# end if
 
 if not os.path.exists(folder_name):
     os.makedirs(folder_name)

@@ -249,7 +249,7 @@ def calulate_aperture(mdg, sd, d):
         d[pp.STATE][pp.ITERATE]["aperture"]= aperture
 
     else:  # sd.dim < mdg.dim_max() -1
-        aperture = update_intersection_aperture(mdg, sd)
+        aperture = update_intersection_aperture(mdg, sd, return_val=True)
         d[pp.STATE][pp.ITERATE].update({"aperture": aperture})
     # end if-else
 
@@ -473,7 +473,7 @@ def update_using_porepy(mdg):
         if sd.dim == mdg.dim_max()-1:
             update_aperture(mdg)
         elif sd.dim < mdg.dim_max() - 1:
-            update_intersection_aperture(mdg, sd)
+            update_intersection_aperture(mdg, sd, return_val=False)
     # end if
     
     # Porosity
@@ -667,11 +667,13 @@ def update_intersection_aperture(mdg, sd, return_val=True):
 
     aperture = np.sum(parent_aperture, axis=0) / num_parent
     
-    d = mdg.subdomain_data(sd)
-    d[pp.STATE][pp.ITERATE].update({"aperture": aperture})
+    if return_val == False:
+        d = mdg.subdomain_data(sd)
+        d[pp.STATE][pp.ITERATE].update({"aperture": aperture})
+    else:
+        return aperture
+    # end if
     
-    return aperture
-
 def aperture_state_to_param(mdg):
 
     for sd, d in mdg.subdomains(return_data=True):
