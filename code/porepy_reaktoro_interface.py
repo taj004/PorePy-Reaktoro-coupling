@@ -1,9 +1,9 @@
 """A Porepy and Reaktoro interface
 
-   Main usage: after preforming a Newton iteration, sequential iteration 
+   After preforming a Newton iteration, sequential iteration 
    or advancing forward in time with PorePy, feed the information 
    (pressure, temperature and element) here, to calculate the 
-   chemical state and return values
+   chemical state with Reaktoro and return values to PorePy
             
 Note: 
     
@@ -27,6 +27,7 @@ def species_indices(chemical_system):
     indices for a particlular system, I made this.
 
     """
+    
     indices = []
     new_phase_number = 0
 
@@ -74,17 +75,10 @@ def species_indices(chemical_system):
 
 class ChemicalSolver:
     """
-    To be filled
-    """
-    def __init__(
-        self,
-        chemical_system: rt.ChemicalSystem,
-        kinetic: bool = False,
-        use_ODML: bool = False,
-    ):
-        """
-
-        Parameters:
+    The PorePy-Reaktoro class
+    
+    
+    Parameters:
 
                 chemical system: The system of the chemical problem investigated
 
@@ -96,8 +90,15 @@ class ChemicalSolver:
                 use_ODML (optional): ``default=None``
 
                     if the on-demand machine learning solver should be used
-
-        """
+                    
+    """
+    
+    def __init__(
+        self,
+        chemical_system: rt.ChemicalSystem,
+        kinetic: bool = False,
+        use_ODML: bool = False,
+    ):
 
         # The chemical system
         self.chem_system = chemical_system
@@ -253,7 +254,6 @@ class ChemicalSolver:
         for sd, d in mdg.subdomains(return_data=True):
             
             phi = d[pp.STATE][pp.ITERATE]["porosity"] 
-            # can alternatively use [pp.PARAMETERS][mass]
             
             for index in range(sd.num_cells):
                 mesh_point_index = index + grid_index
@@ -298,7 +298,7 @@ class ChemicalSolver:
     def solve_chemistry(
         self,
         cond: Optional[rt.EquilibriumConditions] = None,
-        mesh_point_index: Optional[int] = None, #Optional[Union[int, np.ndarray]] = None,
+        mesh_point_index: Optional[int] = None,
         dt: Optional[float] = None,
     ):
         """Solve equilibrium problem, given a total element U
@@ -367,7 +367,7 @@ class ChemicalSolver:
                 # end cond-if-else
             # end mesh_point-if-else
         
-        # Return whether not the solver converged 
+        # Return whether or not the solver converged 
         conv = res.succeeded()
         return conv
 
@@ -427,16 +427,6 @@ class ChemicalSolver:
 
                 If the pressure, temperature and chemical values are
                 from ``pp.STATE`` or ``pp.ITERATE``
-
-
-        Note to self: If the simulations go horribly wrong when the integration
-        between PP and R is "complete", a possible solution is to do
-        ''' x = rt.EquilibriumSpecs(self.chem_system)
-            y = rt.EquilibriumConditions(x)
-            y.pressure(extracted_p)
-            y.temp(extracted_temp)
-
-        and use y in the equilibrium calulations, 'solver.solve'
 
         """
 
@@ -626,7 +616,7 @@ class ChemicalSolver:
                         ][self.chemical_name][species.name()][subdomain_index],
                     "mol",
                 ) 
-                # Note that the value from `d` has unit mol/V, but Reaktoro might
+                # Note that the value from `d` has unit mol/m3, but Reaktoro might
                 # interpret it as mol or mol/kg.
                 # This can possibly cause something funny in the calculations
             # end if
@@ -838,11 +828,11 @@ class ChemicalSolver:
 
             # The porosity
             if scale_by_porosity:
-                phi = d[pp.PARAMETERS]["mass"]["porosity"] #d[pp.STATE][pp.ITERATE]["porosity"]
+                phi = d[pp.PARAMETERS]["mass"]["porosity"] 
             else:
                 phi = 1
             # end if-else
-            #breakpoint()
+            
             for phase in self.chem_system.phases():
                 if phase.name() == "AqueousPhase":
                     for species in self.chem_system.species():
